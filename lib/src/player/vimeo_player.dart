@@ -62,7 +62,7 @@ class _VimeoPlayerState extends State<VimeoPlayer>
       }
     }
     setState(() {
-      // _isPlaying = controller.value.isPlaying;
+      _isPlaying = controller.value.isPlaying;
       _isBuffering = controller.value.isBuffering;
     });
     if (controller.value.videoWidth != null &&
@@ -236,7 +236,6 @@ class _VimeoPlayerState extends State<VimeoPlayer>
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-
     return Material(
       elevation: 0,
       color: Colors.black,

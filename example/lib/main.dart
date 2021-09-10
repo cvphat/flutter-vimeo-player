@@ -56,7 +56,9 @@ class _MyHomePageState extends State<MyHomePage> {
     this._videoTitle = 'Loading...';
 
     this.controller = VimeoPlayerController(
-      initialVideoId: '396660461',
+      // initialVideoId: '396660461',
+      initialVideoId: '586331860',
+      // initialVideoId: '90509568',
       flags: VimeoPlayerFlags(),
     )..addListener(listener);
   }
@@ -84,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(5.0),
           child: Column(
             children: <Widget>[
               Text(_videoTitle),
