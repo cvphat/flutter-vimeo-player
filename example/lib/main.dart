@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     this.controller = VimeoPlayerController(
       initialVideoId: '396660461',
-      flags: VimeoPlayerFlags()
+      flags: VimeoPlayerFlags(),
     )..addListener(listener);
   }
 
@@ -83,21 +83,31 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Text(_videoTitle),
-            VimeoPlayer(
-              controller: controller,
-              skipDuration: 10,
-              onReady: () {
-                setState(() {
-                  this._playerReady = true;
-                });
-              },
-            ),
-            Text(_videoTitle + (controller.value.isBuffering ? " Buffering" : controller.value.isPlaying ? " Playing" : " Ready!") ),
-          ],
-        )
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            children: <Widget>[
+              Text(_videoTitle),
+              VimeoPlayer(
+                controller: controller,
+                skipDuration: 10,
+                onReady: () {
+                  setState(() {
+                    this._playerReady = true;
+                  });
+                },
+              ),
+              Text(
+                _videoTitle +
+                    (controller.value.isBuffering
+                        ? " Buffering"
+                        : controller.value.isPlaying
+                            ? " Playing"
+                            : " Ready!"),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -5,60 +5,56 @@ import 'package:flutter/material.dart';
 import 'package:fluttervimeoplayer/src/controllers/vimeo_player_controller.dart';
 import 'package:fluttervimeoplayer/src/models/vimeo_meta_data.dart';
 import 'package:fluttervimeoplayer/src/player/raw_vimeo_player.dart';
-import 'package:positioned_tap_detector/positioned_tap_detector.dart';
 
 class VimeoPlayer extends StatefulWidget {
-  final Key key;
+  final Key? key;
   final VimeoPlayerController controller;
-  final double height;
-  final double width;
+  final double? height;
+  final double? width;
   final double aspectRatio;
-  int skipDuration;
-  final VoidCallback onReady;
+  final int skipDuration;
+  final VoidCallback? onReady;
 
-  VimeoPlayer({
-    this.key,
-    @required this.controller,
-    this.width,
-    this.height,
-    this.aspectRatio = 16/9,
-    this.skipDuration,
-    this.onReady
-  }) : super(key: key) {
-    if (this.skipDuration == null) {
-      this.skipDuration = 5;
-    }
-  }
+  VimeoPlayer(
+      {this.key,
+      required this.controller,
+      this.width,
+      this.height,
+      this.aspectRatio = 16 / 9,
+      this.skipDuration = 5,
+      this.onReady})
+      : super(key: key);
 
   @override
   _VimeoPlayerState createState() => _VimeoPlayerState();
 }
 
-class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStateMixin {
-  VimeoPlayerController controller;
-  AnimationController _animationController;
-  AnimationController _iconAnimationController;
+class _VimeoPlayerState extends State<VimeoPlayer>
+    with SingleTickerProviderStateMixin {
+  late VimeoPlayerController controller;
+  late AnimationController _animationController;
+  // AnimationController _iconAnimationController;
   bool _initialLoad = true;
-  double _position;
-  double _aspectRatio;
-  bool _seekingF;
-  bool _seekingB;
-  bool _isPlayerReady;
-  bool _centerUiVisible;
-  bool _bottomUiVisible;
-  double _uiOpacity;
-  bool _isBuffering;
-  bool _isPlaying;
-  int _seekDuration;
-  CancelableCompleter completer;
-  Timer t;
-  Timer t2;
-  Animation _playPauseAnimation;
+  late double _position;
+  late double _aspectRatio;
+  late bool _seekingF;
+  late bool _seekingB;
+  late bool _isPlayerReady;
+  late bool _centerUiVisible;
+  late bool _bottomUiVisible;
+  late double _uiOpacity;
+  late bool _isBuffering;
+  late bool _isPlaying;
+  late int _seekDuration;
+  late CancelableCompleter completer;
+  Timer? t;
+  Timer? t2;
+  Animation? _playPauseAnimation;
 
   void listener() async {
     if (controller.value.isReady) {
       if (!_isPlayerReady) {
-        widget.onReady();
+        widget.onReady!();
         setState(() {
           _centerUiVisible = true;
           _isPlayerReady = true;
@@ -66,17 +62,19 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
       }
     }
     setState(() {
-      _isPlaying = controller.value.isPlaying;
+      // _isPlaying = controller.value.isPlaying;
       _isBuffering = controller.value.isBuffering;
     });
-    if (controller.value.videoWidth != null && controller.value.videoHeight != null) {
+    if (controller.value.videoWidth != null &&
+        controller.value.videoHeight != null) {
       setState(() {
-        _aspectRatio = (controller.value.videoWidth / controller.value.videoHeight);
+        _aspectRatio =
+            (controller.value.videoWidth! / controller.value.videoHeight!);
       });
     }
     if (controller.value.videoPosition != null) {
       setState(() {
-        _position = controller.value.videoPosition;
+        _position = controller.value.videoPosition!;
       });
     }
   }
@@ -106,17 +104,15 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
       });
     });
 
-    _animationController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 600)
-    );
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 600));
   }
 
   @override
   void didUpdateWidget(VimeoPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    oldWidget.controller?.removeListener(listener);
-    widget.controller?.addListener(listener);
+    oldWidget.controller.removeListener(listener);
+    widget.controller.addListener(listener);
   }
 
   @override
@@ -169,8 +165,8 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
         _bottomUiVisible = false;
         _uiOpacity = 1.0;
       });
-      if (t != null && t.isActive) {
-        t.cancel();
+      if (t != null && t!.isActive) {
+        t!.cancel();
       }
     } else {
       controller.play();
@@ -178,8 +174,8 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
   }
 
   _onUiTouched() {
-    if (t != null && t.isActive) {
-      t.cancel();
+    if (t != null && t!.isActive) {
+      t!.cancel();
     }
     if (this._isPlaying) {
       setState(() {
@@ -191,15 +187,16 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
       t = Timer(Duration(seconds: 3), () {
         _hideUi();
       });
-    }    
+    }
   }
 
-  _handleDoublTap(TapPosition details) {
-    if (t != null && t.isActive) {
-      t.cancel();
+  _handleDoublTap(TapDownDetails details) {
+    print('debug');
+    if (t != null && t!.isActive) {
+      t!.cancel();
     }
-    if (t2 != null && t2.isActive) {
-      t2.cancel();
+    if (t2 != null && t2!.isActive) {
+      t2!.cancel();
     }
 
     setState(() {
@@ -207,7 +204,7 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
       _centerUiVisible = false;
       _uiOpacity = 1.0;
     });
-    if (details.global.dx > MediaQuery.of(context).size.width / 2) {
+    if (details.globalPosition.dx > MediaQuery.of(context).size.width / 2) {
       setState(() {
         _seekingF = true;
         _seekDuration = _seekDuration + widget.skipDuration;
@@ -226,7 +223,7 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
     t = Timer(Duration(seconds: 3), () {
       _hideUi();
     });
-    t2 = Timer(Duration(seconds: 1),() {
+    t2 = Timer(Duration(seconds: 1), () {
       setState(() {
         _seekingF = false;
         _seekingB = false;
@@ -251,7 +248,6 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
             aspectRatio: _aspectRatio,
             child: Stack(
               fit: StackFit.expand,
-              overflow: Overflow.visible,
               children: <Widget>[
                 RawVimeoPlayer(
                   key: widget.key,
@@ -266,170 +262,190 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
                     controller.reload();
                   },
                 ),
-                PositionedTapDetector(
-                  onTap: (TapPosition position) {
-                    _onUiTouched();
+                GestureDetector(
+                  onTap: _onBottomPlayButton,
+                  onDoubleTap: () {
+                    print('debug double tap');
                   },
-                  onDoubleTap: _handleDoublTap,
+                  onDoubleTapDown: _handleDoublTap,
                   child: AnimatedOpacity(
                     opacity: _uiOpacity,
-                    curve: Interval(0.5,1),
+                    curve: Interval(0.5, 1),
                     duration: Duration(milliseconds: 600),
-                    child: controller.value.isReady ? Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.transparent, Colors.transparent, Colors.black],
-                          stops: [0.0,0.75,1],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter
-                        )
-                      ),
-                      child: controller.value.isReady ?
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            _seekingB ? Row(
-                              children: <Widget>[
-                                Text(
-                                  '${_seekDuration.toString()}s',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18
+                    child: controller.value.isReady
+                        ? Container(
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                    colors: [
+                                  Colors.transparent,
+                                  Colors.transparent,
+                                  Colors.black
+                                ],
+                                    stops: [
+                                  0.0,
+                                  0.75,
+                                  1
+                                ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter)),
+                            child: controller.value.isReady
+                                ? Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        _seekingB
+                                            ? Row(
+                                                children: <Widget>[
+                                                  Text(
+                                                    '${_seekDuration.toString()}s',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18),
+                                                  ),
+                                                  Icon(
+                                                    Icons.fast_rewind,
+                                                    color: Colors.white,
+                                                  ),
+                                                ],
+                                              )
+                                            : SizedBox(),
+                                        _isBuffering
+                                            ? CircularProgressIndicator(
+                                                strokeWidth: 4,
+                                              )
+                                            : _centerUiVisible
+                                                ? FloatingActionButton(
+                                                    elevation: 0,
+                                                    backgroundColor:
+                                                        Colors.white54,
+                                                    child: Icon(
+                                                      Icons.play_arrow,
+                                                      color: Colors.white,
+                                                      size: 34,
+                                                    ),
+                                                    onPressed: () {
+                                                      _onPlay();
+                                                    })
+                                                : SizedBox(),
+                                        _seekingF
+                                            ? Row(
+                                                children: <Widget>[
+                                                  Icon(
+                                                    Icons.fast_forward,
+                                                    color: Colors.white,
+                                                  ),
+                                                  Text(
+                                                    '${_seekDuration.toString()}s',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            : SizedBox(),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox(
+                                    width: 1,
                                   ),
-                                ),
-                                Icon(
-                                  Icons.fast_rewind,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ) : SizedBox(),
-                            _isBuffering ?
-                            CircularProgressIndicator(
-                              strokeWidth: 4,
-                            )
-                            :
-                            _centerUiVisible ? FloatingActionButton(
-                              elevation: 0,
-                              backgroundColor: Colors.white54,
-                              child: Icon(
-                                Icons.play_arrow,
-                                color: Colors.white,
-                                size: 34,
-                              ),
-                              onPressed: () {
-                                _onPlay();
-                              }
-                            ): SizedBox(),
-                            _seekingF ? Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.fast_forward,
-                                  color: Colors.white,
-                                ),
-                                Text(
-                                  '${_seekDuration.toString()}s',
-                                  style: TextStyle(
-                                    color: Colors.white,                                    
-                                  ),
-                                )
-                              ],
-                            ) : SizedBox(),
-                          ],
-                        ),
-                      ) : SizedBox(width: 1,),
-                    ) : SizedBox(),
+                          )
+                        : SizedBox(),
                   ),
                 ),
-                controller.value.isReady && _bottomUiVisible && !_initialLoad ?
-                Positioned(
-                  height: height * 0.05,
-                  bottom: 0,
-                  child: AnimatedOpacity(
-                    duration: Duration(milliseconds: 500),
-                    opacity: _uiOpacity,
-                    child: Flex(
-                      direction: Axis.horizontal,
-                      children: <Widget>[
-                        GestureDetector(
-                          child: Container(
-                            height: height * 0.05,
-                            width: width * 0.1,
-                            child: Icon(
-                              controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onTap: () {
-                            /* pause button clicked */
-                            _onBottomPlayButton();
-                          },
+                controller.value.isReady && _bottomUiVisible && !_initialLoad
+                    ? Positioned(
+                        height: height * 0.05,
+                        bottom: 0,
+                        child: AnimatedOpacity(
+                          duration: Duration(milliseconds: 500),
+                          opacity: _uiOpacity,
+                          child: Flex(
+                              direction: Axis.horizontal,
+                              children: <Widget>[
+                                GestureDetector(
+                                  child: Container(
+                                    height: height * 0.05,
+                                    width: width * 0.1,
+                                    child: Icon(
+                                      controller.value.isPlaying
+                                          ? Icons.pause
+                                          : Icons.play_arrow,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    /* pause button clicked */
+                                    _onBottomPlayButton();
+                                  },
+                                ),
+                                Container(
+                                  width: width * 0.55,
+                                  child: Slider(
+                                    onChangeStart: (val) {
+                                      setState(() {
+                                        _seekingF = true;
+                                      });
+                                    },
+                                    label: _getTimestamp(),
+                                    onChangeEnd: (end) {
+                                      controller.seekTo(end.roundToDouble());
+                                      setState(() {
+                                        _seekingF = false;
+                                      });
+                                    },
+                                    inactiveColor: Colors.blueGrey,
+                                    min: 0,
+                                    max: controller.value.videoDuration != null
+                                        ? controller.value.videoDuration! + 1.0
+                                        : 0.0,
+                                    value: _position,
+                                    onChanged: (value) {
+                                      if (!_seekingF) {
+                                        setState(() {
+                                          if (value >= 0 && value <= _position)
+                                            _position = value;
+                                        });
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  child: Text(
+                                    _getTimestamp() + "",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 10),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    width: width * 0.1,
+                                    child: Icon(
+                                      Icons.settings,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onTap: () {},
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    width: width * 0.1,
+                                    child: Icon(
+                                      Icons.fullscreen,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    print('object');
+                                  },
+                                )
+                              ]),
                         ),
-                        Container(
-                          width: width * 0.6,
-                          child: Slider(
-                            onChangeStart: (val) {
-                              setState(() {
-                                _seekingF = true;
-                              });
-                            },
-                            label: _getTimestamp(),
-                            onChangeEnd: (end) {
-                              controller.seekTo(end.roundToDouble());
-                              setState(() {
-                                _seekingF = false;
-                              });
-                            },
-                            inactiveColor: Colors.blueGrey,
-                            min: 0,
-                            max: controller.value.videoDuration != null ? controller.value.videoDuration + 1.0 : 0.0,
-                            value: _position,
-                            onChanged: (value) {
-                              if (!_seekingF) {
-                                setState(() {
-                                  if (value >= 0 && value <= _position)
-                                  _position = value;
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        Container(
-                          child: Text(
-                            _getTimestamp() + "",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10
-                            ),
-                          ),
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            width: width * 0.1,
-                            child: Icon(
-                              Icons.settings,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onTap: () {
-                          },
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            width: width * 0.1,
-                            child: Icon(
-                              Icons.fullscreen,
-                              color: Colors.white,
-                            ),
-                          ),
-                          onTap: () {
-                          },
-                        )
-                      ]
-                    ),
-                  ),
-                ):
-                SizedBox(height: 1,)
+                      )
+                    : SizedBox(
+                        height: 1,
+                      )
               ],
             ),
           ),
@@ -458,7 +474,6 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
     }
 
     return ret;
-
   }
 
   String _printDuration(Duration duration) {
@@ -479,13 +494,14 @@ class _VimeoPlayerState extends State<VimeoPlayer> with SingleTickerProviderStat
     ret += '$twoDigitMinutes:';
     ret += '$twoDigitSeconds';
 
-
     return ret == '' ? '0:00' : ret;
   }
 
   _getTimestamp() {
-    var position = _printDuration(new Duration(seconds: (controller.value.videoPosition??0).round()));
-    var duration = _printDuration(new Duration(seconds: (controller.value.videoDuration??0).round()));
+    var position = _printDuration(
+        Duration(seconds: (controller.value.videoPosition ?? 0).round()));
+    var duration = _printDuration(
+        Duration(seconds: (controller.value.videoDuration ?? 0).round()));
 
     return '$position/$duration';
   }

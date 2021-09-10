@@ -18,7 +18,6 @@ class VimeoPlayerFlags {
   final bool title;
   final bool transparent;
 
-
   const VimeoPlayerFlags({
     this.autoPause = true,
     this.autoPlay = false,
@@ -37,39 +36,37 @@ class VimeoPlayerFlags {
     this.width = 0,
   });
 
-  VimeoPlayerFlags copyWith({
-    double height,
-    double width,
-    bool autoPause,
-    bool autoPlay,
-    bool background,
-    bool byLine,
-    Color color,
-    bool controls,
-    bool loop,
-    bool muted,
-    bool playsInLine,
-    bool portrait,
-    double speed,
-    bool title,
-    bool transparent
-  }) {
+  VimeoPlayerFlags copyWith(
+      {double? height,
+      double? width,
+      bool? autoPause,
+      bool? autoPlay,
+      bool? background,
+      bool? byLine,
+      Color? color,
+      bool? controls,
+      bool? loop,
+      bool? muted,
+      bool? playsInLine,
+      bool? portrait,
+      double? speed,
+      bool? title,
+      bool? transparent}) {
     return VimeoPlayerFlags(
-      autoPause: autoPause ?? this.autoPause,
-      autoPlay: autoPlay ?? this.autoPlay,
-      background: background ?? this.background,
-      byLine: byLine ?? this.byLine,
-      color: color ?? this.color,
-      controls: controls ?? this.controls,
-      loop: loop ?? this.loop,
-      muted: muted ?? this.muted,
-      playsInLine: playsInLine ?? this.playsInLine,
-      portrait: portrait ?? this.portrait,
-      speed: speed ?? this.speed,
-      title: title ?? this.title,
-      transparent: transparent ?? this.transparent,
-      height: height ?? this.height,
-      width: width ?? this.width
-    );
+        autoPause: autoPause ?? this.autoPause,
+        autoPlay: autoPlay ?? this.autoPlay,
+        background: background ?? this.background,
+        byLine: byLine ?? this.byLine,
+        color: color ?? this.color,
+        controls: controls ?? this.controls,
+        loop: loop ?? this.loop,
+        muted: muted ?? this.muted,
+        playsInLine: playsInLine ?? this.playsInLine,
+        portrait: portrait ?? this.portrait,
+        speed: speed ?? this.speed,
+        title: title ?? this.title,
+        transparent: transparent ?? this.transparent,
+        height: height ?? this.height,
+        width: width ?? this.width);
   }
 }

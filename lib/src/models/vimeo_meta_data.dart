@@ -13,19 +13,20 @@ class VimeoMetaData {
 
   factory VimeoMetaData.fromRawData(String rawData) {
     Map<String, dynamic> parsedData = jsonDecode(rawData);
-    var durationInMs = (((parsedData['duration'] ?? 0) as double) * 1000).floor();
+    var durationInMs =
+        (((parsedData['duration'] ?? 0) as double) * 1000).floor();
     return VimeoMetaData(
       videoId: parsedData[''],
       videoTitle: parsedData[''],
-      videoDuration: parsedData['']
+      videoDuration: parsedData[''],
     );
   }
 
   @override
   String toString() {
     return '$runtimeType('
-    'videoId: $videoId, '
-    'videoTitle: $videoTitle, '
-    'duration: ${videoDuration.inSeconds} sec.';
+        'videoId: $videoId, '
+        'videoTitle: $videoTitle, '
+        'duration: ${videoDuration.inSeconds} sec.';
   }
 }

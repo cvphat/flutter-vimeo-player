@@ -8,12 +8,12 @@ class VimeoPlayerValue {
   final bool isFullscreen;
   final bool isBuffering;
   final bool hasEnded;
-  final String videoTitle;
-  final double videoPosition;
-  final double videoDuration;
-  final double videoWidth;
-  final double videoHeight;
-  final InAppWebViewController webViewController;
+  final String? videoTitle;
+  final double? videoPosition;
+  final double? videoDuration;
+  final double? videoWidth;
+  final double? videoHeight;
+  final InAppWebViewController? webViewController;
 
   VimeoPlayerValue(
       {this.isReady = false,
@@ -29,17 +29,17 @@ class VimeoPlayerValue {
       this.webViewController});
 
   VimeoPlayerValue copyWith(
-      {bool isReady,
-      bool isPlaying,
-      bool isFullscreen,
-      bool isBuffering,
-      bool hasEnded,
-      String videoTitle,
-      double videoPosition,
-      double videoDuration,
-      double videoWidth,
-      double videoHeight,
-      InAppWebViewController webViewController}) {
+      {bool? isReady,
+      bool? isPlaying,
+      bool? isFullscreen,
+      bool? isBuffering,
+      bool? hasEnded,
+      String? videoTitle,
+      double? videoPosition,
+      double? videoDuration,
+      double? videoWidth,
+      double? videoHeight,
+      InAppWebViewController? webViewController}) {
     return VimeoPlayerValue(
         isReady: isReady ?? this.isReady,
         isPlaying: isPlaying ?? this.isPlaying,
@@ -59,14 +59,14 @@ class VimeoPlayerController extends ValueNotifier<VimeoPlayerValue> {
   final String initialVideoId;
   final VimeoPlayerFlags flags;
 
-  VimeoPlayerController(
-      {@required this.initialVideoId, this.flags = const VimeoPlayerFlags()})
-      : assert(initialVideoId != null, 'InitialVideoId is mandetory'),
-        super(VimeoPlayerValue());
+  VimeoPlayerController({
+    required this.initialVideoId,
+    this.flags = const VimeoPlayerFlags(),
+  }) : super(VimeoPlayerValue());
 
   factory VimeoPlayerController.of(BuildContext context) => context
-      .dependOnInheritedWidgetOfExactType<InheritedVimeoPlayer>()
-      ?.controller;
+      .dependOnInheritedWidgetOfExactType<InheritedVimeoPlayer>()!
+      .controller;
 
   void updateValue(VimeoPlayerValue newValue) => value = newValue;
 
@@ -92,11 +92,10 @@ class VimeoPlayerController extends ValueNotifier<VimeoPlayerValue> {
 class InheritedVimeoPlayer extends InheritedWidget {
   final VimeoPlayerController controller;
   const InheritedVimeoPlayer({
-    Key key,
-    @required this.controller,
-    @required Widget child,
-  })  : assert(controller != null),
-        super(key: key, child: child);
+    Key? key,
+    required this.controller,
+    required Widget child,
+  }) : super(key: key, child: child);
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {
