@@ -1,10 +1,11 @@
 name: fluttervimeoplayer
 description: A flutter package wrapping the vimeo player
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/ThuAbLKA/flutter-vimeo-player.git
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
+  flutter: ">=2.5.0"
 
 dependencies:
   flutter:
